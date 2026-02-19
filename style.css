@@ -1,0 +1,231 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(16,14,23);
+  overflow: hidden;
+}
+
+
+
+/*Cargar la fuente cuphead*/
+@font-face{
+  font-family: 'Cuphead';
+  src: url("CupheadFelix-Regular.otf") format("truetype");
+}
+
+/*Efecto color recorriendo los bordes*/
+@keyframes worm-border {
+  0% { box-shadow: 5px 0 blue, -2px 0 transparent, 0 2px transparent, 0 -2px transparent; }
+  25% { box-shadow: 5px 0 transparent, -2px 0 blue, 0 2px transparent, 0 -2px transparent; }
+  50% { box-shadow: 5px 0 transparent, -2px 0 transparent, 0 2px blue, 0 -2px transparent; }
+  75% { box-shadow: 5px 0 transparent, -2px 0 transparent, 0 2px transparent, 0 -2px blue; }
+  100% { box-shadow: 5px 0 blue, -2px 0 transparent, 0 2px transparent, 0 -2px transparent; }
+}
+
+/*Comentarios*/
+.bubble {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-80%);
+  transition: transform 0.3s ease-in-out;
+  height: 500px;
+}
+
+.message-icon {
+  width: 50px;
+  height: 24px;
+  color: blue;
+}
+
+.comment {
+  background-color: white;
+  padding: 18px 20px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  font-weight: bold;
+  color: black;
+}
+
+/*Capybara*/
+.add-button {
+  position: fixed;
+  top: 30%;
+  left: 42%;
+  background-color: white;
+  border: none;
+  border-radius: 9999px;
+  width: 180px;
+  height: 180px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 6px 10px 10px 0 rgb(77,29,106);
+  transition:  0.4s;
+  font-size: 50px;
+  z-index: 1;
+  transition: 0.3s;
+}
+
+/*Segundo capibara*/
+.reverse{
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 42%;
+  background-color: white;
+  border: none;
+  border-radius: 9999px;
+  width: 180px;
+  height: 180px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 6px 10px 10px 0 rgb(77,29,106);
+  font-size: 50px;
+  z-index: 1;
+}
+
+/*Cuadro para insertar comentario*/
+.div-text{
+  position: absolute;
+  left: 35%;
+  top: 63%;
+  width: fit-content;
+  font-size: 2rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: linear-gradient(90deg, rgb(26,162,177), rgb(250,0,92));
+  padding: 5px 12px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.div-text p{
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #efef;
+}
+
+.div-text img{
+  width: 45px;
+}
+
+/* Estilos para el card */
+.card {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+.card h1{
+  font-family: "Cuphead", sans-serif;
+}
+
+
+.card-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #efef;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  height: 250px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.card .commentInput {
+  width: 90%;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+  outline: none;
+  animation: worm-border 3s infinite linear;
+  margin-left: 20px;
+}
+
+.card .nameInput{
+  width: 90%;
+  padding: 10px;
+  margin: 20px 0;
+  border-radius: 5px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  outline: none;
+  animation: worm-border 3s infinite linear;
+  margin-left: 20px;
+}
+
+.card-content .buttons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card button {
+  padding: 10px 40px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+
+}
+
+.card .submit {
+  background-color: #3b82f6;
+  color: #fff;
+  transition: 0.3s;
+  box-shadow: 1px 1px 4px 0 #000;
+}
+
+.card .submit:hover{
+  background-color: #ffff;
+  color: #3b82f6;
+}
+
+.card .cancel {
+  background-color: gray;
+  color: white;
+  transition: 0.3s;
+  box-shadow: 1px 1px 4px 0 #000;
+}
+
+.card .cancel:hover{
+  background-color: #fff;
+  color: #000;
+}
+
+/*Animación al recargar la página*/
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-up.fade-up-show {
+  opacity: 1;
+  transform: translateY(0);
+}

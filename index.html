@@ -1,43 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/recursos/icon.ico">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/e522357059.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/recursos/icon.ico" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/e522357059.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <title>Panel de Opiniones</title>
-</head>
-<body>
-    <img class="add-button" id="add-button" data-aos="fade-down" src="recursos/capy2r.png" alt="capybara">
-    <img class="reverse" id="reverse" data-aos="fade-down" src="recursos/capy2.png" alt="takataka">
+  </head>
+  <body>
+    <img
+      class="add-button"
+      id="add-button"
+      data-aos="fade-down"
+      src="recursos/capy2r.png"
+      alt="capybara"
+    />
+    <img
+      class="reverse"
+      id="reverse"
+      data-aos="fade-down"
+      src="recursos/capy2.png"
+      alt="takataka"
+    />
     <div class="div-text" id="presiona">
-        <p class="texto" data-aos="fade-down">Presiona el Capybara</p>
-        <img src="recursos/dedo.png" alt="dedo" data-aos="fade-down">
+      <p class="texto" data-aos="fade-down">Presiona el Capybara</p>
+      <img src="recursos/dedo.png" alt="dedo" data-aos="fade-down" />
     </div>
     <!-- card para input -->
     <div id="card" class="card">
-        <div class="card-content"> 
-            <h1>Deja tu comentario</h1>
-            <form id="form">
-                <input type="text" class="nameInput" id="nameInput" name="name" placeholder="Introduce tu nombre" required>
-                <input type="text" class="commentInput" id="commentInput" name="comment" placeholder="¿Qué te parecieron las presentaciones?" required>
-                <div class="buttons">
-                    <button type="submit" class="submit">Enviar</button>
-                    <button type="button" class="cancel" id="cancel">Cancelar</button>
-                </div>
-            </form>
-        </div>
+      <div class="card-content">
+        <h1>Deja tu comentario</h1>
+        <form id="form">
+          <input
+            type="text"
+            class="nameInput"
+            id="nameInput"
+            name="name"
+            placeholder="Introduce tu nombre"
+            required
+          />
+          <input
+            type="text"
+            class="commentInput"
+            id="commentInput"
+            name="comment"
+            placeholder="¿Qué te parecieron las presentaciones?"
+            required
+          />
+          <div class="buttons">
+            <button type="submit" class="submit">Enviar</button>
+            <button type="button" class="cancel" id="cancel">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+    <script type="module">
+      import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers/dist/transformers.min.js";
+    </script>
+  </body>
 </html>

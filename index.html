@@ -74,6 +74,29 @@
     <script src="script.js"></script>
     <script type="module">
       import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers/dist/transformers.min.js";
+
+      //Pipeline de análisis con IA
+      const analyzer = await pipeline("sentiment-analysis");
+
+      //Obtener rating de 1 a 5 estrellas
+      window.getRating = async function (commentText) {
+        const result = await analyzer(commentText);
+        const label = result[0].label;
+        const score = result[0].score;
+
+        let stars;
+
+        if (label === "POSITIVE") {
+          stars = 3 + Math.round(score * 2);
+        } else {
+          stars = 1 + Math.round(score * 2);
+        }
+
+        // asegurar que esté entre 1 y 5
+        stars = Math.min(Math.max(stars, 1), 5);
+
+        return stars;
+      };
     </script>
   </body>
 </html>

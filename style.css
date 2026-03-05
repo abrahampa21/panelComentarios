@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -11,21 +13,14 @@ body {
   overflow: hidden;
 }
 
+body .comment, .div-text, h1 {
+  font-family: 'Oswald', sans-serif;
+}
 
-
-/*Cargar la fuente cuphead*/
+/*Cargando la fuente cuphead*/
 @font-face{
   font-family: 'Cuphead';
   src: url("CupheadFelix-Regular.otf") format("truetype");
-}
-
-/*Efecto color recorriendo los bordes*/
-@keyframes worm-border {
-  0% { box-shadow: 5px 0 blue, -2px 0 transparent, 0 2px transparent, 0 -2px transparent; }
-  25% { box-shadow: 5px 0 transparent, -2px 0 blue, 0 2px transparent, 0 -2px transparent; }
-  50% { box-shadow: 5px 0 transparent, -2px 0 transparent, 0 2px blue, 0 -2px transparent; }
-  75% { box-shadow: 5px 0 transparent, -2px 0 transparent, 0 2px transparent, 0 -2px blue; }
-  100% { box-shadow: 5px 0 blue, -2px 0 transparent, 0 2px transparent, 0 -2px transparent; }
 }
 
 /*Comentarios*/
@@ -46,15 +41,19 @@ body {
 }
 
 .comment {
-  background-color: white;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
   padding: 18px 20px;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  font-size: 17px;
-  font-weight: bold;
-  color: black;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 25px 11px 25px 11px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+  font-size: 18.5px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.5;
 }
+
+
 
 /*Capybara*/
 .add-button {
@@ -195,27 +194,29 @@ body {
 }
 
 .card .submit {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #2d5a91, #3b82f6);
   color: #fff;
-  transition: 0.3s;
-  box-shadow: 1px 1px 4px 0 #000;
+  box-shadow: 0 5px 15px rgba(59,130,246,0.4);
+  border-radius: 12px
 }
 
 .card .submit:hover{
-  background-color: #ffff;
-  color: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #4f9cf9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59,130,246,0.6);
 }
 
 .card .cancel {
-  background-color: gray;
-  color: white;
-  transition: 0.3s;
-  box-shadow: 1px 1px 4px 0 #000;
+  background: linear-gradient(135deg, #77797c, #a3a7ad);
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .card .cancel:hover{
-  background-color: #fff;
-  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, #919397, #77797c); /* inversión sutil del gradiente */
+  color: #fff;
 }
 
 /*Animación al recargar la página*/
@@ -229,3 +230,14 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+.stars {
+  margin-top: 5px;
+}
+
+.stars i {
+  margin-right: 3px;
+  font-size: 20px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+

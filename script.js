@@ -99,20 +99,27 @@ function removeCommentFromLocalStorage(name,comment) {
 }
 
 //Cuadro de comentario
-function createBubble(text) {
+async function createBubble(text) {
   const bubble = document.createElement("div");
   bubble.className = "bubble";
   bubble.style.cursor = "pointer";
 
   const [name, comment] = text.split(" dijo: ");
 
-  //Borrar el comentario cuando se dé click
-  bubble.addEventListener("click", () => {
-    bubble.remove();
-    removeCommentFromLocalStorage(name,comment);
-  });
+  // Obtener rating
+  const starsCount = await window.getRating(comment);
 
-  // Crear el ícono de mensaje
+  // Crear estrellas
+  const starsContainer = document.createElement("div");
+  starsContainer.className = "stars";
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("i");
+    star.className = i <= starsCount ? "fas fa-star" : "far fa-star";
+    star.style.color = "#FFD700"; // dorado
+    starsContainer.appendChild(star);
+  }
+
+  //Ícono de mensaje
   const icon = document.createElement("div");
   icon.className = "message-icon";
   icon.innerHTML = `
@@ -121,55 +128,56 @@ function createBubble(text) {
         </svg>
     `;
 
-  // Crear el contenedor del comentario
+  // Crear contenedor del comentario
   const commentElement = document.createElement("div");
   commentElement.className = "comment";
   commentElement.textContent = text;
+
+  // Agregar estrellas debajo del comentario
+  commentElement.appendChild(starsContainer);
 
   bubble.appendChild(icon);
   bubble.appendChild(commentElement);
 
   // Posición inicial
-  const x = Math.random() * 70 + 20; // 10-90, 20-60
+  const x = Math.random() * 70 + 20; 
   const y = 100;
   bubble.style.left = `${x}%`;
   bubble.style.bottom = `${y}%`;
 
-  // Velocidad aleatoria
   const speed = 1.5 + Math.random() * 1;
-
   body.appendChild(bubble);
 
   // Animación
   let currentY = y;
-
   function animate() {
     currentY -= speed * 0.1;
-
     if (currentY > -50) {
       bubble.style.bottom = `${currentY}%`;
-      bubble.style.transform = `translateX(-50%) rotate(${
-        Math.sin(currentY / 10) * 5
-      }deg)`;
+      bubble.style.transform = `translateX(-50%) rotate(${Math.sin(currentY / 10) * 5}deg)`;
       requestAnimationFrame(animate);
     } else {
       setTimeout(() => {
-        // Reinicia la posición
         currentY = y;
         bubble.style.bottom = `${currentY}%`;
-
         const newX = Math.random() * 70 + 20;
         bubble.style.left = `${newX}%`;
-
         requestAnimationFrame(animate);
       }, 1000);
     }
   }
-
   requestAnimationFrame(animate);
+
+  // Borrar comentario al click
+  bubble.addEventListener("click", () => {
+    bubble.remove();
+    removeCommentFromLocalStorage(name, comment);
+  });
 }
 
 //Animation On Screen al recargar la página
 AOS.init({
   once: true,
 });
+
+

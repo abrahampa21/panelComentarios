@@ -54,7 +54,6 @@ body .comment, .div-text, h1 {
 }
 
 
-
 /*Capybara*/
 .add-button {
   position: fixed;
@@ -241,3 +240,58 @@ body .comment, .div-text, h1 {
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
+/*Modal for message*/
+.modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content{
+  background-color: #fff;
+  padding: 25px 35px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: modalFade 0.3s ease-in-out;
+}
+
+.modal .modal-title{
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+.modal .close{
+  color: #fff;
+  font-size: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  transition: 0.2s;
+}
+
+.modal .close:hover{
+  color: #ff6b6b;
+  transform: scale(1.2);
+}
+
+@keyframes modalFade {
+  from{
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

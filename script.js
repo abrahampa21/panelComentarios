@@ -7,17 +7,37 @@ const cancelButton = document.getElementById("cancel");
 const reverseCapybara = document.getElementById("reverse");
 const nameInput = document.getElementById("nameInput");
 const form = document.getElementById("form");
-const presiona = document.getElementById("presiona");
+const labelMessage = document.getElementById("label-message");
+const modal = document.querySelector(".modal");
+const closeModal = document.querySelector(".close");
 
-presiona.addEventListener("click", () => {
-  alert("Aquí no, el capybara :)");
+//Modal for message
+labelMessage.addEventListener("click", () => {
+  modal.style.display = "flex";
+});
+
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+modal.addEventListener("click", e => {
+  if(e.target === modal){
+  modal.style.display = "none";
+    
+  }
+})
+
+//Cerrar card
+card.addEventListener("click", e => {
+  if(e.target === card){
+    card.style.display = "none";
+  }
 })
 
 //Mostrar el card del comentario
 reverseCapybara.addEventListener("click", () => {
   card.style.display = "block";
   nameInput.focus();
-
 });
 
 //Cerrar el card
@@ -30,7 +50,9 @@ cancelButton.addEventListener("click", () => {
 //Guarda los mensajes en un localStorage
 window.addEventListener("load", function () {
   const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
-  storedComments.forEach((comment) => createBubble(`${comment.name} dijo: ${comment.comment}`));
+  storedComments.forEach((comment) =>
+    createBubble(`${comment.name} dijo: ${comment.comment}`),
+  );
 
   this.localStorage.removeItem("comments");
 });
@@ -45,10 +67,10 @@ addButton.addEventListener("mouseover", () => {
   });
 });
 
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function (e) {
   e.preventDefault();
   submitComment();
-})
+});
 
 //Enviar comentario
 function submitComment() {
@@ -86,13 +108,14 @@ commentInput.addEventListener("keypress", function (e) {
 });
 
 //Remover comentarios
-function removeCommentFromLocalStorage(name,comment) {
+function removeCommentFromLocalStorage(name, comment) {
   // Recuperar los comentarios guardados
   let storedComments = JSON.parse(localStorage.getItem("comments")) || [];
 
   // Filtrar los comentarios que no sean el que se va a eliminar
-  storedComments = storedComments.filter(storedComment => 
-    storedComment.name !== name || storedComment.comment !== comment
+  storedComments = storedComments.filter(
+    (storedComment) =>
+      storedComment.name !== name || storedComment.comment !== comment,
   );
 
   localStorage.setItem("comments", JSON.stringify(storedComments));
@@ -140,7 +163,7 @@ async function createBubble(text) {
   bubble.appendChild(commentElement);
 
   // Posición inicial
-  const x = Math.random() * 70 + 20; 
+  const x = Math.random() * 70 + 20;
   const y = 100;
   bubble.style.left = `${x}%`;
   bubble.style.bottom = `${y}%`;
@@ -179,5 +202,3 @@ async function createBubble(text) {
 AOS.init({
   once: true,
 });
-
-

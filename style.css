@@ -240,7 +240,7 @@ body .comment, .div-text, h1 {
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-/*Modal for message*/
+/*Modal para mensaje*/
 .modal{
   position: fixed;
   inset: 0;

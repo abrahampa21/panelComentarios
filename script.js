@@ -57,15 +57,15 @@ window.addEventListener("load", function () {
   this.localStorage.removeItem("comments");
 });
 
-//Mostrar el otro capibara
-addButton.addEventListener("mouseover", () => {
-  reverseCapybara.style.display = "block";
-
-  reverseCapybara.addEventListener("mouseout", () => {
-    addButton.style.display = "block";
-    reverseCapybara.style.display = "none";
-  });
-});
+// Envolver ambos capybaras en un contenedor para hover estable y fluido
+const capyWrapper = document.createElement('div');
+capyWrapper.className = 'capy-wrapper';
+capyWrapper.setAttribute('data-aos', 'fade-down');
+addButton.parentNode.insertBefore(capyWrapper, addButton);
+addButton.removeAttribute('data-aos');
+reverseCapybara.removeAttribute('data-aos');
+capyWrapper.appendChild(addButton);
+capyWrapper.appendChild(reverseCapybara);
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();

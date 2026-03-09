@@ -54,41 +54,63 @@ body .comment, .div-text, h1 {
 }
 
 
-/*Capybara*/
-.add-button {
+/*Contenedor de capybaras*/
+.capy-wrapper {
   position: fixed;
   top: 30%;
   left: 42%;
-  background-color: white;
-  border: none;
-  border-radius: 9999px;
   width: 180px;
   height: 180px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 6px 10px 10px 0 rgb(77,29,106);
-  transition:  0.4s;
-  font-size: 50px;
   z-index: 1;
-  transition: 0.3s;
+  cursor: pointer;
 }
 
-/*Segundo capibara*/
-.reverse{
-  display: none;
-  position: fixed;
-  top: 30%;
-  left: 42%;
+/*Capybara*/
+.add-button,
+.reverse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: white;
   border: none;
   border-radius: 9999px;
-  width: 180px;
-  height: 180px;
-  font-size: 24px;
-  cursor: pointer;
   box-shadow: 6px 10px 10px 0 rgb(77,29,106);
-  font-size: 50px;
+  will-change: opacity, transform;
+  transition:
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-button {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.reverse {
+  opacity: 0;
+  transform: scale(0.92);
   z-index: 1;
+}
+
+/* Crossfade al hacer hover — puro CSS, sin JS */
+.capy-wrapper:hover .add-button {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.capy-wrapper:hover .reverse {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 8px 14px 20px 0 rgba(77,29,106,0.65);
+}
+
+/* El wrapper entero crece sutilmente al hover */
+.capy-wrapper:hover {
+  filter: drop-shadow(0 0 8px rgba(77,29,106,0.25));
 }
 
 /*Cuadro para insertar comentario*/

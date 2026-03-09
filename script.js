@@ -27,6 +27,11 @@ modal.addEventListener("click", e => {
   }
 })
 
+//Abrir form
+function openFormComment(){
+  card.style.display = "block";
+  
+}
 //Cerrar card
 card.addEventListener("click", e => {
   if(e.target === card){
@@ -47,25 +52,80 @@ cancelButton.addEventListener("click", () => {
   nameInput.value = "";
 });
 
-//Guarda los mensajes en un localStorage
+// IA: promesa que se resuelve cuando el modelo termina de cargar
+let _aiReadyResolve;
+const _aiReadyPromise = new Promise(resolve => { _aiReadyResolve = resolve; });
+
+window.onAiReady = function(ratingFn) {
+  window.getRating = ratingFn;
+  _aiReadyResolve();
+};
+
+// Espera a que la IA esté lista (máx. 60s) y devuelve las estrellas
+async function getRatingWhenReady(commentText) {
+  try {
+    await Promise.race([
+      _aiReadyPromise,
+      new Promise((_, reject) => setTimeout(reject, 60000))
+    ]);
+    return await window.getRating(commentText);
+  } catch {
+    return 3; // fallback neutro si la IA no responde
+  }
+}
+
+// Actualiza las estrellas de un comentario ya guardado en localStorage
+function updateCommentStars(name, comment, stars) {
+  const stored = JSON.parse(localStorage.getItem("comments")) || [];
+  const idx = stored.findIndex(c => c.name === name && c.comment === comment);
+  if (idx !== -1) {
+    stored[idx].stars = stars;
+    localStorage.setItem("comments", JSON.stringify(stored));
+  }
+}
+
+// Recalcula y pinta el panel de estadísticas
+function updatePanel() {
+  const stored = JSON.parse(localStorage.getItem("comments")) || [];
+  document.getElementById("panel-total").textContent = stored.length;
+
+  const rated = stored.filter(c => typeof c.stars === "number");
+  const starEls = document.querySelectorAll("#panel-rating i");
+  const avgEl   = document.getElementById("panel-avg");
+
+  if (rated.length > 0) {
+    const avg     = rated.reduce((sum, c) => sum + c.stars, 0) / rated.length;
+    const rounded = Math.round(avg);
+    starEls.forEach((s, i) => {
+      s.className = i < rounded ? "fas fa-star" : "far fa-star";
+    });
+    avgEl.textContent = `${avg.toFixed(1)} / 5`;
+  } else {
+    starEls.forEach(s => s.className = "far fa-star");
+    avgEl.textContent = "—";
+  }
+
+  const bestTextEl   = document.getElementById("panel-best-text");
+  const bestAuthorEl = document.getElementById("panel-best-author");
+  if (rated.length > 0) {
+    const best = rated.reduce((max, c) => c.stars > max.stars ? c : max);
+    bestTextEl.textContent   = `"${best.comment}"`;
+    bestAuthorEl.textContent = `— ${best.name}`;
+  } else if (stored.length > 0) {
+    bestTextEl.textContent   = "Valorando comentarios...";
+    bestAuthorEl.textContent = "";
+  } else {
+    bestTextEl.textContent   = "Aún no hay comentarios.";
+    bestAuthorEl.textContent = "";
+  }
+}
+
+//Carga los comentarios guardados al iniciar
 window.addEventListener("load", function () {
   const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
-  storedComments.forEach((comment) =>
-    createBubble(`${comment.name} dijo: ${comment.comment}`),
-  );
-
-  this.localStorage.removeItem("comments");
+  storedComments.forEach(c => createBubble(c.name, c.comment, c.stars ?? null));
+  updatePanel();
 });
-
-// Envolver ambos capybaras en un contenedor para hover estable y fluido
-const capyWrapper = document.createElement('div');
-capyWrapper.className = 'capy-wrapper';
-capyWrapper.setAttribute('data-aos', 'fade-down');
-addButton.parentNode.insertBefore(capyWrapper, addButton);
-addButton.removeAttribute('data-aos');
-reverseCapybara.removeAttribute('data-aos');
-capyWrapper.appendChild(addButton);
-capyWrapper.appendChild(reverseCapybara);
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -77,17 +137,17 @@ function submitComment() {
   const comment = commentInput.value.trim();
   const name = nameInput.value.trim();
   if (comment && name) {
-    const newComment = { name, comment };
-    createBubble(`${name} dijo: ${comment}`);
+    // Guardar con stars: null; se actualiza cuando la IA responda
+    const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
+    storedComments.push({ name, comment, stars: null });
+    localStorage.setItem("comments", JSON.stringify(storedComments));
+
+    createBubble(name, comment, null);
     card.style.display = "none";
     commentInput.value = "";
     nameInput.value = "";
     lanzarConfetti();
-
-    //Comentarios aparecerán incluso cuando se recargue la página
-    const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
-    storedComments.push(newComment);
-    localStorage.setItem("comments", JSON.stringify(storedComments));
+    updatePanel();
   }
 }
 
@@ -122,27 +182,12 @@ function removeCommentFromLocalStorage(name, comment) {
 }
 
 //Cuadro de comentario
-async function createBubble(text) {
+async function createBubble(name, comment, existingStars) {
   const bubble = document.createElement("div");
   bubble.className = "bubble";
   bubble.style.cursor = "pointer";
 
-  const [name, comment] = text.split(" dijo: ");
-
-  // Obtener rating
-  const starsCount = await window.getRating(comment);
-
-  // Crear estrellas
-  const starsContainer = document.createElement("div");
-  starsContainer.className = "stars";
-  for (let i = 1; i <= 5; i++) {
-    const star = document.createElement("i");
-    star.className = i <= starsCount ? "fas fa-star" : "far fa-star";
-    star.style.color = "#FFD700"; // dorado
-    starsContainer.appendChild(star);
-  }
-
-  //Ícono de mensaje
+  // Ícono de mensaje
   const icon = document.createElement("div");
   icon.className = "message-icon";
   icon.innerHTML = `
@@ -151,12 +196,20 @@ async function createBubble(text) {
         </svg>
     `;
 
-  // Crear contenedor del comentario
+  // Contenedor del comentario
   const commentElement = document.createElement("div");
   commentElement.className = "comment";
-  commentElement.textContent = text;
+  commentElement.textContent = `${name} dijo: ${comment}`;
 
-  // Agregar estrellas debajo del comentario
+  // Estrellas (placeholder vacío hasta que la IA responda)
+  const starsContainer = document.createElement("div");
+  starsContainer.className = "stars";
+  for (let i = 0; i < 5; i++) {
+    const star = document.createElement("i");
+    star.className = "far fa-star";
+    star.style.color = "#FFD700";
+    starsContainer.appendChild(star);
+  }
   commentElement.appendChild(starsContainer);
 
   bubble.appendChild(icon);
@@ -171,30 +224,51 @@ async function createBubble(text) {
   const speed = 1.5 + Math.random() * 1;
   body.appendChild(bubble);
 
-  // Animación
+  // Animación con cancelAnimationFrame para evitar leaks
+  let animId;
+  let restartTimeout;
   let currentY = y;
+
   function animate() {
     currentY -= speed * 0.1;
     if (currentY > -50) {
       bubble.style.bottom = `${currentY}%`;
       bubble.style.transform = `translateX(-50%) rotate(${Math.sin(currentY / 10) * 5}deg)`;
-      requestAnimationFrame(animate);
+      animId = requestAnimationFrame(animate);
     } else {
-      setTimeout(() => {
+      restartTimeout = setTimeout(() => {
         currentY = y;
         bubble.style.bottom = `${currentY}%`;
-        const newX = Math.random() * 70 + 20;
-        bubble.style.left = `${newX}%`;
-        requestAnimationFrame(animate);
+        bubble.style.left = `${Math.random() * 70 + 20}%`;
+        animId = requestAnimationFrame(animate);
       }, 1000);
     }
   }
-  requestAnimationFrame(animate);
+  animId = requestAnimationFrame(animate);
+
+  // Obtener rating: usar el guardado si existe, si no pedirlo a la IA
+  const starsCount = typeof existingStars === "number"
+    ? existingStars
+    : await getRatingWhenReady(comment);
+
+  if (typeof existingStars !== "number") {
+    updateCommentStars(name, comment, starsCount);
+    updatePanel();
+  }
+
+  // Pintar las estrellas con el resultado
+  const starEls = starsContainer.querySelectorAll("i");
+  starEls.forEach((s, i) => {
+    s.className = i < starsCount ? "fas fa-star" : "far fa-star";
+  });
 
   // Borrar comentario al click
   bubble.addEventListener("click", () => {
+    cancelAnimationFrame(animId);
+    clearTimeout(restartTimeout);
     bubble.remove();
     removeCommentFromLocalStorage(name, comment);
+    updatePanel();
   });
 }
 

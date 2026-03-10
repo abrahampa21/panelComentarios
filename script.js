@@ -1,62 +1,56 @@
 //Definiendo variables
 const body = document.body;
-const card = document.getElementById("card");
+const formComment = document.getElementById("form-comment");
 const commentInput = document.getElementById("commentInput");
 const addButton = document.getElementById("add-button");
-const cancelButton = document.getElementById("cancel");
-const reverseCapybara = document.getElementById("reverse");
 const nameInput = document.getElementById("nameInput");
 const form = document.getElementById("form");
 const labelMessage = document.getElementById("label-message");
 const modal = document.querySelector(".modal");
-const closeModal = document.querySelector(".close");
 
-//Modal for message
+//Modal para mensaje
 labelMessage.addEventListener("click", () => {
   modal.style.display = "flex";
 });
 
-closeModal.addEventListener("click", () => {
+function closeModal(){
   modal.style.display = "none";
+};
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
 });
 
-modal.addEventListener("click", e => {
-  if(e.target === modal){
-  modal.style.display = "none";
-    
-  }
-})
-
-//Abrir form
-function openFormComment(){
-  card.style.display = "block";
-  
-}
-//Cerrar card
-card.addEventListener("click", e => {
-  if(e.target === card){
-    card.style.display = "none";
-  }
-})
-
-//Mostrar el card del comentario
-reverseCapybara.addEventListener("click", () => {
-  card.style.display = "block";
+//Abrir formulario de comentario
+function openFormComment() {
+  formComment.style.display = "block";
   nameInput.focus();
-});
+}
 
-//Cerrar el card
-cancelButton.addEventListener("click", () => {
-  card.style.display = "none";
+//Cerrar el formulario de comentario
+function closeFormComment() {
+  formComment.style.display = "none";
   commentInput.value = "";
   nameInput.value = "";
+}
+
+//Cerrar el formulario en otro lugar que no sea el formComment
+formComment.addEventListener("click", (e) => {
+  if (e.target === formComment) {
+    formComment.style.display = "none";
+  }
 });
+
 
 // IA: promesa que se resuelve cuando el modelo termina de cargar
 let _aiReadyResolve;
-const _aiReadyPromise = new Promise(resolve => { _aiReadyResolve = resolve; });
+const _aiReadyPromise = new Promise((resolve) => {
+  _aiReadyResolve = resolve;
+});
 
-window.onAiReady = function(ratingFn) {
+window.onAiReady = function (ratingFn) {
   window.getRating = ratingFn;
   _aiReadyResolve();
 };
@@ -66,7 +60,7 @@ async function getRatingWhenReady(commentText) {
   try {
     await Promise.race([
       _aiReadyPromise,
-      new Promise((_, reject) => setTimeout(reject, 60000))
+      new Promise((_, reject) => setTimeout(reject, 60000)),
     ]);
     return await window.getRating(commentText);
   } catch {
@@ -77,7 +71,7 @@ async function getRatingWhenReady(commentText) {
 // Actualiza las estrellas de un comentario ya guardado en localStorage
 function updateCommentStars(name, comment, stars) {
   const stored = JSON.parse(localStorage.getItem("comments")) || [];
-  const idx = stored.findIndex(c => c.name === name && c.comment === comment);
+  const idx = stored.findIndex((c) => c.name === name && c.comment === comment);
   if (idx !== -1) {
     stored[idx].stars = stars;
     localStorage.setItem("comments", JSON.stringify(stored));
@@ -89,33 +83,33 @@ function updatePanel() {
   const stored = JSON.parse(localStorage.getItem("comments")) || [];
   document.getElementById("panel-total").textContent = stored.length;
 
-  const rated = stored.filter(c => typeof c.stars === "number");
+  const rated = stored.filter((c) => typeof c.stars === "number");
   const starEls = document.querySelectorAll("#panel-rating i");
-  const avgEl   = document.getElementById("panel-avg");
+  const avgEl = document.getElementById("panel-avg");
 
   if (rated.length > 0) {
-    const avg     = rated.reduce((sum, c) => sum + c.stars, 0) / rated.length;
+    const avg = rated.reduce((sum, c) => sum + c.stars, 0) / rated.length;
     const rounded = Math.round(avg);
     starEls.forEach((s, i) => {
       s.className = i < rounded ? "fas fa-star" : "far fa-star";
     });
     avgEl.textContent = `${avg.toFixed(1)} / 5`;
   } else {
-    starEls.forEach(s => s.className = "far fa-star");
+    starEls.forEach((s) => (s.className = "far fa-star"));
     avgEl.textContent = "—";
   }
 
-  const bestTextEl   = document.getElementById("panel-best-text");
+  const bestTextEl = document.getElementById("panel-best-text");
   const bestAuthorEl = document.getElementById("panel-best-author");
   if (rated.length > 0) {
-    const best = rated.reduce((max, c) => c.stars > max.stars ? c : max);
-    bestTextEl.textContent   = `"${best.comment}"`;
+    const best = rated.reduce((max, c) => (c.stars > max.stars ? c : max));
+    bestTextEl.textContent = `"${best.comment}"`;
     bestAuthorEl.textContent = `— ${best.name}`;
   } else if (stored.length > 0) {
-    bestTextEl.textContent   = "Valorando comentarios...";
+    bestTextEl.textContent = "Valorando comentarios...";
     bestAuthorEl.textContent = "";
   } else {
-    bestTextEl.textContent   = "Aún no hay comentarios.";
+    bestTextEl.textContent = "Aún no hay comentarios.";
     bestAuthorEl.textContent = "";
   }
 }
@@ -123,7 +117,9 @@ function updatePanel() {
 //Carga los comentarios guardados al iniciar
 window.addEventListener("load", function () {
   const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
-  storedComments.forEach(c => createBubble(c.name, c.comment, c.stars ?? null));
+  storedComments.forEach((c) =>
+    createBubble(c.name, c.comment, c.stars ?? null),
+  );
   updatePanel();
 });
 
@@ -143,7 +139,7 @@ function submitComment() {
     localStorage.setItem("comments", JSON.stringify(storedComments));
 
     createBubble(name, comment, null);
-    card.style.display = "none";
+    formComment.style.display = "none";
     commentInput.value = "";
     nameInput.value = "";
     lanzarConfetti();
@@ -247,9 +243,10 @@ async function createBubble(name, comment, existingStars) {
   animId = requestAnimationFrame(animate);
 
   // Obtener rating: usar el guardado si existe, si no pedirlo a la IA
-  const starsCount = typeof existingStars === "number"
-    ? existingStars
-    : await getRatingWhenReady(comment);
+  const starsCount =
+    typeof existingStars === "number"
+      ? existingStars
+      : await getRatingWhenReady(comment);
 
   if (typeof existingStars !== "number") {
     updateCommentStars(name, comment, starsCount);

@@ -1,4 +1,6 @@
+/*Fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
   margin: 0;
@@ -96,7 +98,7 @@ body .comment, .div-text, h1 {
   z-index: 1;
 }
 
-/* Crossfade al hacer hover — puro CSS, sin JS */
+/* Crossfade al hacer hover — puro CSS*/
 .capy-wrapper:hover .add-button {
   opacity: 0;
   transform: scale(0.92);
@@ -121,10 +123,10 @@ body .comment, .div-text, h1 {
   width: fit-content;
   font-size: 2rem;
   display: flex;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
-  background: linear-gradient(90deg, rgb(26,162,177), rgb(250,0,92));
-  padding: 5px 12px;
+  background: linear-gradient(150deg, rgb(26,162,177), rgb(235, 4, 88));
+  padding: 5px 15px;
   border-radius: 10px;
   z-index: 2;
 }
@@ -286,9 +288,10 @@ body .comment, .div-text, h1 {
 }
 
 .modal .modal-title{
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 25px;
   color: #333;
+  font-family: "Noto Sans Display", sans-serif;
+
 }
 
 .modal .close{
@@ -303,7 +306,7 @@ body .comment, .div-text, h1 {
 }
 
 .modal .close:hover{
-  color: #ff6b6b;
+  color: #4f5ee2;
   transform: scale(1.2);
 }
 
@@ -318,9 +321,7 @@ body .comment, .div-text, h1 {
   }
 }
 
-/* ================================================
-   Panel de estadísticas
-   ================================================ */
+/*Panel de estadísticas */
 .stats-panel {
   position: fixed;
   top: 20px;
@@ -340,7 +341,7 @@ body .comment, .div-text, h1 {
 }
 
 .panel-title {
-  font-size: 18px;
+  font-size: 30px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2.5px;
@@ -366,7 +367,7 @@ body .comment, .div-text, h1 {
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 16px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: rgba(255,255,255,0.45);
@@ -381,7 +382,7 @@ body .comment, .div-text, h1 {
 }
 
 .panel-stars i {
-  font-size: 16px;
+  font-size: 19px;
   color: rgba(255,215,0,0.25);
   margin-right: 2px;
   transition: color 0.4s ease;
@@ -404,7 +405,7 @@ body .comment, .div-text, h1 {
 }
 
 .best-label {
-  font-size: 11px;
+  font-size: 16px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: rgba(255,215,0,0.65);
@@ -412,7 +413,7 @@ body .comment, .div-text, h1 {
 }
 
 .best-text {
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255,255,255,0.85);
   line-height: 1.5;
   font-style: italic;
@@ -425,7 +426,7 @@ body .comment, .div-text, h1 {
 }
 
 .best-author {
-  font-size: 12px;
+  font-size: 14px;
   color: rgb(26,162,177);
   margin-top: 7px;
   font-weight: 500;

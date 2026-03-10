@@ -24,7 +24,9 @@
     <title>CapyPanel</title>
   </head>
   <body>
-    <div class="capy-wrapper" data-aos="fade-down">
+
+    <!--MAIN-->
+    <div class="capy-wrapper" data-aos="fade-down" onclick="openFormComment()">
       <img
         class="add-button"
         id="add-button"
@@ -35,16 +37,16 @@
         class="reverse"
         id="reverse"
         src="recursos/capy2.png"
-        alt="takataka"
-        onclick="openFormComment()"
+        alt="reverseCapybara"
       />
     </div>
     <div class="div-text" id="label-message">
       <p class="texto" data-aos="fade-down">Presiona el Capybara</p>
       <img src="recursos/dedo.png" alt="dedo" data-aos="fade-down" />
     </div>
-    <!-- card para input -->
-    <div id="card" class="card">
+
+    <!-- FORMULARIO PARA COMENTARIO -->
+    <div id="form-comment" class="card">
       <div class="card-content">
         <h1>Deja tu comentario</h1>
         <form id="form">
@@ -66,21 +68,21 @@
           />
           <div class="buttons">
             <button type="submit" class="submit">Enviar</button>
-            <button type="button" class="cancel" id="cancel">Cancelar</button>
+            <button type="button" class="cancel" onclick="closeFormComment()">Cancelar</button>
           </div>
         </form>
       </div>
     </div>
 
-    <!--Modal para el mensaje "Aquí no, el capybara"-->
+    <!--MODAL PARA COMENTARIO-->
     <div class="modal">
-        <span class="close">&times;</span>
+        <span class="close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <h2 class="modal-title">AQUÍ NO, EL CAPYBARA :)</h2>
         </div>
     </div>
 
-    <!-- Panel de estadísticas -->
+    <!-- PANEL DE ESTADÍSTICAS -->
     <div class="stats-panel" id="stats-panel" data-aos="fade-right">
       <h2 class="panel-title">CapyPanel</h2>
       <div class="stat-row">
@@ -101,10 +103,10 @@
       </div>
     </div>
 
-    <!-- Indicador de carga de IA -->
+    <!-- INDICADOR DE CARGA IA -->
     <div class="ai-loading" id="ai-loading">
       <div class="spinner"></div>
-      Cargando modelo IA...
+      Cargando modelo IA para análisis avanzado...
     </div>
 
     <script src="script.js"></script>
@@ -119,7 +121,6 @@
         );
         window.onAiReady(async (commentText) => {
           const result = await analyzer(commentText);
-          // Labels: "1 star", "2 stars", "3 stars", "4 stars", "5 stars"
           const stars = parseInt(result[0].label.charAt(0));
           return Math.min(Math.max(stars, 1), 5);
         });
@@ -141,12 +142,3 @@
   </body>
 </html>
 
-<!--
-PENDIENTES:
-
--DAR ESTILOS AL MODAL
--MEJORAR RAITING DE COMENTARIOS (QUE LOS COMENTARIOS PUEDAN SER CALIFICADOS DESDE 1 ESTRELLA HASTA 5 ESTRELLAS)
--IMPLEMENTAR UN PANEL QUE CONTENGA: TOTAL DE COMENTARIOS, RAITING GENERAL DEL PROYECTO CON ESTRELLAS, MEJOR COMENTARIO (AÑADE MÁS FUNCIONES)
-
--ANIMACIÓN O UNA TRANSICIÓN PARA EL CAMBIO DE CAPYBARA AL TENER EL CURSOR SOBRE ÉL
--->

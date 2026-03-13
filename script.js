@@ -7,21 +7,39 @@ const nameInput = document.getElementById("nameInput");
 const form = document.getElementById("form");
 const labelMessage = document.getElementById("label-message");
 const modal = document.querySelector(".modal");
+const palabrasNoPermitidas = [
+  "puto",
+  "verga",
+  "chingada",
+  "puta",
+  "mierda",
+  "piruja",
+  "pirujo",
+];
+const modalBannedWords = document.getElementById("modal-banned-word");
 
 //Modal para mensaje
 labelMessage.addEventListener("click", () => {
   modal.style.display = "flex";
 });
 
-function closeModal(){
+function closeModal() {
   modal.style.display = "none";
-};
+  modalBannedWords.style.display = "none";
+}
 
 modal.addEventListener("click", (e) => {
   if (e.target === modal) {
     modal.style.display = "none";
   }
 });
+
+modalBannedWords.addEventListener("click", (e) => {
+  if(e.target === modalBannedWords){
+    modalBannedWords.style.display = "none";
+
+  }
+})
 
 //Abrir formulario de comentario
 function openFormComment() {
@@ -42,7 +60,6 @@ formComment.addEventListener("click", (e) => {
     formComment.style.display = "none";
   }
 });
-
 
 // IA: promesa que se resuelve cuando el modelo termina de cargar
 let _aiReadyResolve;
@@ -128,23 +145,37 @@ form.addEventListener("submit", function (e) {
   submitComment();
 });
 
+//Función para detectar groserías
+function hasBannedWords(text) {
+  const regex = new RegExp(`\\b(${palabrasNoPermitidas.join("|")})\\b`, "i");
+  return regex.test(text);
+}
+
 //Enviar comentario
 function submitComment() {
   const comment = commentInput.value.trim();
   const name = nameInput.value.trim();
-  if (comment && name) {
-    // Guardar con stars: null; se actualiza cuando la IA responda
-    const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
-    storedComments.push({ name, comment, stars: null });
-    localStorage.setItem("comments", JSON.stringify(storedComments));
 
-    createBubble(name, comment, null);
-    formComment.style.display = "none";
+  if (!comment || !name) return;
+
+  if (hasBannedWords(comment) || hasBannedWords(name)) {
+    modalBannedWords.style.display = "flex";
     commentInput.value = "";
     nameInput.value = "";
-    lanzarConfetti();
-    updatePanel();
+    return;
   }
+
+  // Guardar con stars: null; se actualiza cuando la IA responda
+  const storedComments = JSON.parse(localStorage.getItem("comments")) || [];
+  storedComments.push({ name, comment, stars: null });
+  localStorage.setItem("comments", JSON.stringify(storedComments));
+
+  createBubble(name, comment, null);
+  formComment.style.display = "none";
+  commentInput.value = "";
+  nameInput.value = "";
+  lanzarConfetti();
+  updatePanel();
 }
 
 // Función para disparar confetti

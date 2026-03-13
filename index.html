@@ -57,6 +57,7 @@
             name="name"
             placeholder="Introduce tu nombre"
             required
+            autocomplete="off"
           />
           <input
             type="text"
@@ -65,6 +66,7 @@
             name="comment"
             placeholder="¿Qué te parecieron las presentaciones?"
             required
+            autocomplete="off"
           />
           <div class="buttons">
             <button type="submit" class="submit">Enviar</button>
@@ -75,10 +77,18 @@
     </div>
 
     <!--MODAL PARA COMENTARIO-->
-    <div class="modal">
+    <div class="modal" id="modal-comment">
         <span class="close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <h2 class="modal-title">AQUÍ NO, EL CAPYBARA :)</h2>
+        </div>
+    </div>
+
+    <!--MODAL PARA COMENTARIO CON PALABRAS NO PERMITIDAS-->
+      <div class="modal modal-banned-word" id="modal-banned-word">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <h2 class="modal-title">El comentario no cumple con las normas de lenguaje establecidas</h2>
         </div>
     </div>
 

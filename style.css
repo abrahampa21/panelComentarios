@@ -1,6 +1,6 @@
 /*Fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 
 * {
   margin: 0;
@@ -150,7 +150,8 @@ body .comment, .div-text, h1 {
 }
 
 .card h1{
-  font-family: "Noto Sans Display", sans-serif;
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
 }
 
 
@@ -162,8 +163,8 @@ body .comment, .div-text, h1 {
   background-color: #efef;
   padding: 20px;
   border-radius: 10px;
-  width: 500px;
-  height: 250px;
+  width: fit-content;
+  height: fit-content;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -171,6 +172,7 @@ body .comment, .div-text, h1 {
 
 .card .commentInput {
   width: 90%;
+  height: 40px;
   padding: 10px;
   border-radius: 5px;
   font-size: 16px;
@@ -183,6 +185,7 @@ body .comment, .div-text, h1 {
 
 .card .nameInput{
   width: 90%;
+  height: 40px;
   padding: 10px;
   margin: 20px 0;
   border-radius: 5px;
@@ -200,21 +203,22 @@ body .comment, .div-text, h1 {
 }
 
 .card button {
-  padding: 10px 40px;
   margin: 5px;
+  padding: 10px 0;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   font-size: 15px;
+  transition: 0.2s ease-in-out;
 
 }
 
 .card .submit {
   background: linear-gradient(135deg, #2d5a91, #3b82f6);
   color: #fff;
-  box-shadow: 0 5px 15px rgba(59,130,246,0.4);
-  border-radius: 12px
+  box-shadow: 0 5px 15px rgba(247, 249, 252, 0.4);
+  width: 130px;
 }
 
 .card .submit:hover{
@@ -227,12 +231,13 @@ body .comment, .div-text, h1 {
   background: linear-gradient(135deg, #77797c, #a3a7ad);
   color: #fff;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 130px;
 }
 
 .card .cancel:hover{
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  background: linear-gradient(135deg, #919397, #77797c); /* inversión sutil del gradiente */
+  background: linear-gradient(135deg, #c5c6c7, #b3b3b4); /* inversión sutil del gradiente */
   color: #fff;
 }
 
@@ -282,9 +287,9 @@ body .comment, .div-text, h1 {
 }
 
 .modal .modal-title{
-  font-size: 25px;
+  font-size: 22px;
   color: #333;
-  font-family: "Noto Sans Display", sans-serif;
+  font-family: "Archivo Black", sans-serif;
 
 }
 
@@ -304,6 +309,11 @@ body .comment, .div-text, h1 {
   transform: scale(1.2);
 }
 
+/*Modal para palabras no permitidas*/
+.modal-banned-word{
+  font-family: "Archivo Black", sans-serif;
+}
+
 @keyframes modalFade {
   from{
     opacity: 0;
@@ -314,6 +324,8 @@ body .comment, .div-text, h1 {
     transform: translateY(0) scale(1);
   }
 }
+
+
 
 /*Panel de estadísticas */
 .stats-panel {

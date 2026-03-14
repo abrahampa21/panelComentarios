@@ -15,6 +15,8 @@ const palabrasNoPermitidas = [
   "mierda",
   "piruja",
   "pirujo",
+  "brga",
+  "vrga"
 ];
 const modalBannedWords = document.getElementById("modal-banned-word");
 
@@ -35,11 +37,10 @@ modal.addEventListener("click", (e) => {
 });
 
 modalBannedWords.addEventListener("click", (e) => {
-  if(e.target === modalBannedWords){
+  if (e.target === modalBannedWords) {
     modalBannedWords.style.display = "none";
-
   }
-})
+});
 
 //Abrir formulario de comentario
 function openFormComment() {
@@ -272,12 +273,14 @@ async function createBubble(name, comment, existingStars) {
     }
   }
   animId = requestAnimationFrame(animate);
+  const MAX_CHARS = 1000;
+  const safeComment = comment.slice(0, MAX_CHARS);
 
   // Obtener rating: usar el guardado si existe, si no pedirlo a la IA
   const starsCount =
     typeof existingStars === "number"
       ? existingStars
-      : await getRatingWhenReady(comment);
+      : await getRatingWhenReady(safeComment);
 
   if (typeof existingStars !== "number") {
     updateCommentStars(name, comment, starsCount);

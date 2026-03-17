@@ -16,9 +16,11 @@ const palabrasNoPermitidas = [
   "piruja",
   "pirujo",
   "brga",
+  "vrga",
   "vrga"
 ];
 const modalBannedWords = document.getElementById("modal-banned-word");
+const emojiMap = { 5: "🤩", 4: "😄", 3: "😊", 2: "😕", 1: "😞" };
 
 //Modal para mensaje
 labelMessage.addEventListener("click", () => {
@@ -227,7 +229,18 @@ async function createBubble(name, comment, existingStars) {
   // Contenedor del comentario
   const commentElement = document.createElement("div");
   commentElement.className = "comment";
-  commentElement.textContent = `${name} dijo: ${comment}`;
+
+  // Emoji (se actualiza tras el análisis de IA)
+  const emojiEl = document.createElement("span");
+  emojiEl.className = "comment-emoji";
+  emojiEl.textContent = typeof existingStars === "number" ? (emojiMap[existingStars] || "😊") : "⏳";
+  commentElement.appendChild(emojiEl);
+
+  // Texto del comentario
+  const textEl = document.createElement("span");
+  textEl.className = "comment-text";
+  textEl.textContent = `${name} dijo: ${comment}`;
+  commentElement.appendChild(textEl);
 
   // Estrellas (placeholder vacío hasta que la IA responda)
   const starsContainer = document.createElement("div");
@@ -287,6 +300,12 @@ async function createBubble(name, comment, existingStars) {
     updatePanel();
   }
 
+  // Actualizar emoji con el rating
+  emojiEl.textContent = emojiMap[starsCount] || "😊";
+  if (typeof existingStars !== "number") {
+    emojiEl.classList.add("comment-emoji--ready");
+  }
+
   // Pintar las estrellas con el resultado
   const starEls = starsContainer.querySelectorAll("i");
   starEls.forEach((s, i) => {
@@ -302,6 +321,106 @@ async function createBubble(name, comment, existingStars) {
     updatePanel();
   });
 }
+
+// Panel: arrastrar, colapsar y modo navbar
+(function initPanel() {
+  const panel       = document.getElementById("stats-panel");
+  const dragHandle  = document.getElementById("panel-drag-handle");
+  const collapseBtn = document.getElementById("panel-collapse-btn");
+  const modeBtn     = document.getElementById("panel-mode-btn");
+
+  // Restaurar estado guardado en localStorage
+  const savedMode      = localStorage.getItem("panel-mode") || "panel";
+  const savedCollapsed = localStorage.getItem("panel-collapsed") === "true";
+  const savedPos       = JSON.parse(localStorage.getItem("panel-pos") || "null");
+
+  if (savedMode === "navbar") {
+    panel.classList.add("stats-panel--navbar");
+    modeBtn.querySelector("i").className = "fas fa-th-large";
+    modeBtn.title = "Cambiar a Panel";
+  } else if (savedPos) {
+    panel.style.left = savedPos.x + "px";
+    panel.style.top  = savedPos.y + "px";
+  }
+
+  if (savedCollapsed && savedMode !== "navbar") {
+    panel.classList.add("stats-panel--collapsed");
+    collapseBtn.querySelector("i").className = "fas fa-chevron-down";
+    collapseBtn.title = "Expandir";
+  }
+
+  // Colapsar / expandir
+  collapseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isCollapsed = panel.classList.toggle("stats-panel--collapsed");
+    collapseBtn.querySelector("i").className = isCollapsed ? "fas fa-chevron-down" : "fas fa-chevron-up";
+    collapseBtn.title = isCollapsed ? "Expandir" : "Minimizar";
+    localStorage.setItem("panel-collapsed", isCollapsed);
+  });
+
+  // Cambiar entre Panel y Navbar
+  modeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isNavbar = panel.classList.toggle("stats-panel--navbar");
+    modeBtn.querySelector("i").className = isNavbar ? "fas fa-th-large" : "fas fa-grip-lines";
+    modeBtn.title = isNavbar ? "Cambiar a Panel" : "Cambiar a Navbar";
+    localStorage.setItem("panel-mode", isNavbar ? "navbar" : "panel");
+    if (isNavbar) {
+      panel.classList.remove("stats-panel--collapsed");
+      panel.style.left = "";
+      panel.style.top  = "";
+    } else {
+      const pos = JSON.parse(localStorage.getItem("panel-pos") || "null");
+      if (pos) {
+        panel.style.left = pos.x + "px";
+        panel.style.top  = pos.y + "px";
+      }
+    }
+  });
+
+  // Arrastrar el panel
+  let isDragging = false;
+  let startX, startY, origLeft, origTop;
+
+  dragHandle.addEventListener("pointerdown", (e) => {
+    if (panel.classList.contains("stats-panel--navbar")) return;
+    if (e.target.closest(".panel-controls")) return;
+    isDragging = true;
+    dragHandle.setPointerCapture(e.pointerId);
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = panel.getBoundingClientRect();
+    origLeft = rect.left;
+    origTop  = rect.top;
+    panel.style.transition = "none";
+    panel.style.left = origLeft + "px";
+    panel.style.top  = origTop  + "px";
+    panel.style.zIndex = "100";
+    e.preventDefault();
+  });
+
+  dragHandle.addEventListener("pointermove", (e) => {
+    if (!isDragging) return;
+    const newLeft = Math.max(0, Math.min(window.innerWidth  - panel.offsetWidth,  origLeft + e.clientX - startX));
+    const newTop  = Math.max(0, Math.min(window.innerHeight - panel.offsetHeight, origTop  + e.clientY - startY));
+    panel.style.left = newLeft + "px";
+    panel.style.top  = newTop  + "px";
+  });
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    panel.style.transition = "";
+    panel.style.zIndex = "";
+    localStorage.setItem("panel-pos", JSON.stringify({
+      x: parseFloat(panel.style.left),
+      y: parseFloat(panel.style.top)
+    }));
+  };
+
+  dragHandle.addEventListener("pointerup",     endDrag);
+  dragHandle.addEventListener("pointercancel", endDrag);
+})();
 
 //Animation On Screen al recargar la página
 AOS.init({

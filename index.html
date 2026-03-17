@@ -97,26 +97,39 @@
 
     <!-- PANEL DE ESTADÍSTICAS -->
     <div class="stats-panel" id="stats-panel" data-aos="fade-right">
-      <h2 class="panel-title">CapyPanel</h2>
-      <div class="stat-row">
-        <span class="stat-label">Comentarios</span>
-        <span class="stat-value" id="panel-total">0</span>
-      </div>
-      <div class="stat-row stat-row--col">
-        <span class="stat-label">Rating general</span>
-        <div class="panel-stars" id="panel-rating">
-          <i class="far fa-star"></i><i class="far fa-star"></i
-          ><i class="far fa-star"></i><i class="far fa-star"></i
-          ><i class="far fa-star"></i>
+      <div class="panel-header" id="panel-drag-handle">
+        <span class="panel-grip"><i class="fas fa-grip-vertical"></i></span>
+        <h2 class="panel-title">CapyPanel</h2>
+        <div class="panel-controls">
+          <button class="panel-btn" id="panel-mode-btn" title="Cambiar a Navbar">
+            <i class="fas fa-grip-lines"></i>
+          </button>
+          <button class="panel-btn" id="panel-collapse-btn" title="Minimizar">
+            <i class="fas fa-chevron-up"></i>
+          </button>
         </div>
-        <span class="rating-avg" id="panel-avg">—</span>
       </div>
-      <div class="best-section">
-        <div class="best-label">&#127942; Mejor comentario</div>
-        <div class="best-text" id="panel-best-text">
-          Aún no hay comentarios.
+      <div class="panel-body">
+        <div class="stat-row">
+          <span class="stat-label">Comentarios</span>
+          <span class="stat-value" id="panel-total">0</span>
         </div>
-        <div class="best-author" id="panel-best-author"></div>
+        <div class="stat-row stat-row--col">
+          <span class="stat-label">Rating general</span>
+          <div class="panel-stars" id="panel-rating">
+            <i class="far fa-star"></i><i class="far fa-star"></i
+            ><i class="far fa-star"></i><i class="far fa-star"></i
+            ><i class="far fa-star"></i>
+          </div>
+          <span class="rating-avg" id="panel-avg">—</span>
+        </div>
+        <div class="best-section">
+          <div class="best-label">&#127942; Mejor comentario</div>
+          <div class="best-text" id="panel-best-text">
+            Aún no hay comentarios.
+          </div>
+          <div class="best-author" id="panel-best-author"></div>
+        </div>
       </div>
     </div>
 

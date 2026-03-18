@@ -7,18 +7,37 @@ const nameInput = document.getElementById("nameInput");
 const form = document.getElementById("form");
 const labelMessage = document.getElementById("label-message");
 const modal = document.querySelector(".modal");
-const palabrasNoPermitidas = [
-  "puto",
-  "verga",
-  "chingada",
-  "puta",
-  "mierda",
-  "piruja",
-  "pirujo",
-  "brga",
-  "vrga",
-  "vrga"
+const bannedWords = [
+  "puto","puta","verga","chingada","chingar","chingado",
+  "mierda","pendejo","pendeja","culero","culera",
+  "cabron","pinche","perra","perro","zorra",
+  "joto","maricon"
 ];
+
+//Funciones para normalizar palabras no permitidas
+function normalizeBannedWords(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")                 
+    .replace(/[\u0300-\u036f]/g, "")  
+    .replace(/[@4]/g, "a")
+    .replace(/[3]/g, "e")
+    .replace(/[1!|]/g, "i")
+    .replace(/[0]/g, "o")
+    .replace(/[$5]/g, "s")
+    .replace(/[^a-z0-9]/g, "");      
+}
+
+function buildRegex(word) {
+  return new RegExp(
+    word
+      .split("")                 
+      .map(l => `${l}+`)           
+      .join(""),                   
+    "i"
+  );
+}
+
 const modalBannedWords = document.getElementById("modal-banned-word");
 const emojiMap = { 5: "🤩", 4: "😄", 3: "😊", 2: "😕", 1: "😞" };
 
@@ -148,10 +167,16 @@ form.addEventListener("submit", function (e) {
   submitComment();
 });
 
-//Función para detectar groserías
+const bannedRegex = bannedWords.map(buildRegex);
+
+//Función para detectar groserías 
 function hasBannedWords(text) {
-  const regex = new RegExp(`\\b(${palabrasNoPermitidas.join("|")})\\b`, "i");
-  return regex.test(text);
+  const clean = normalizeBannedWords(text);
+
+  if (bannedRegex.some(regex => regex.test(clean))) return true;
+  if (bannedWords.some(word => clean.includes(word))) return true;
+
+  return false;
 }
 
 //Enviar comentario

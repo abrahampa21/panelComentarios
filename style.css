@@ -496,6 +496,7 @@ body .comment, .div-text, h1 {
   gap: 8px;
   margin-bottom: 14px;
   padding-bottom: 10px;
+  height: 60px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   cursor: grab;
   user-select: none;
@@ -614,7 +615,7 @@ body .comment, .div-text, h1 {
 }
 
 .stats-panel--navbar .stat-label {
-  font-size: 11px;
+  font-size: 16px;
   white-space: nowrap;
 }
 
@@ -623,7 +624,7 @@ body .comment, .div-text, h1 {
 }
 
 .stats-panel--navbar .rating-avg {
-  font-size: 11px;
+  font-size: 14px;
   margin-top: 0;
 }
 
@@ -641,7 +642,7 @@ body .comment, .div-text, h1 {
 }
 
 .stats-panel--navbar .best-label {
-  font-size: 11px;
+  font-size: 14px;
   white-space: nowrap;
   margin-bottom: 0;
 }
@@ -653,13 +654,13 @@ body .comment, .div-text, h1 {
 }
 
 .stats-panel--navbar .best-author {
-  font-size: 11px;
+  font-size: 14px;
   margin-top: 0;
   white-space: nowrap;
 }
 
 .stats-panel--navbar .panel-title {
-  font-size: 17px;
+  font-size: 25px;
   letter-spacing: 1.5px;
 }
 

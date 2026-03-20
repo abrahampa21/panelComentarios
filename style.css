@@ -314,6 +314,82 @@ body .comment, .div-text, h1 {
   font-family: "Archivo Black", sans-serif;
 }
 
+/* Notificacion dinamica (solo para 'AQUI NO, EL CAPYBARA') */
+#modal-comment {
+  inset: auto;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  width: min(92vw, 520px);
+  height: auto;
+  background: transparent;
+  backdrop-filter: none;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1200;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1),
+    opacity 0.35s ease;
+}
+
+#modal-comment.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#modal-comment .modal-content {
+  width: 100%;
+  max-width: none;
+  border-radius: 18px;
+  padding: 16px 48px 16px 18px;
+  text-align: left;
+  background: linear-gradient(145deg, rgba(20,18,30,0.95), rgba(16,14,23,0.98));
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  box-shadow:
+    0 14px 35px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  animation: none;
+  position: relative;
+}
+
+#modal-comment .modal-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(26,162,177,0.65), rgba(250,0,92,0.65));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+#modal-comment .modal-title {
+  color: #fff;
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.35;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin: 0;
+  padding-right: 8px;
+}
+
+#modal-comment .close {
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  color: rgba(255,255,255,0.7);
+}
+
+#modal-comment .close:hover {
+  color: rgb(26,162,177);
+  transform: scale(1.08);
+}
+
 @keyframes modalFade {
   from{
     opacity: 0;

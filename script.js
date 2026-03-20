@@ -6,7 +6,7 @@ const addButton = document.getElementById("add-button");
 const nameInput = document.getElementById("nameInput");
 const form = document.getElementById("form");
 const labelMessage = document.getElementById("label-message");
-const modal = document.querySelector(".modal");
+const modal = document.getElementById("modal-comment");
 const bannedWords = [
   "puto","puta","verga","chingada","chingar","chingado",
   "mierda","pendejo","pendeja","culero","culera",
@@ -40,14 +40,24 @@ function buildRegex(word) {
 
 const modalBannedWords = document.getElementById("modal-banned-word");
 const emojiMap = { 5: "🤩", 4: "😄", 3: "😊", 2: "😕", 1: "😞" };
+let modalToastTimeout;
 
 //Modal para mensaje
 labelMessage.addEventListener("click", () => {
-  modal.style.display = "flex";
+  showCapyToast();
 });
 
+function showCapyToast() {
+  clearTimeout(modalToastTimeout);
+  modal.classList.add("is-visible");
+  modalToastTimeout = setTimeout(() => {
+    modal.classList.remove("is-visible");
+  }, 2600);
+}
+
 function closeModal() {
-  modal.style.display = "none";
+  clearTimeout(modalToastTimeout);
+  modal.classList.remove("is-visible");
   modalBannedWords.style.display = "none";
 }
 
